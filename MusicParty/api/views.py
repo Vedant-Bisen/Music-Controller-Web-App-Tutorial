@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
-from .models import Room
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer, PlaylistSerializer
+from .models import Room, Playlists
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
+
 
 # Create your views here.
 
@@ -133,3 +134,31 @@ class UpdateRoom(APIView):
             return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PlaylistView(APIView):
+    serializer_class = PlaylistSerializer
+
+    def post(self,request,format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            playlist_id = serializer.data.get('Playlist_id')
+            playlist_name = serializer.data.get('Playlist_name')
+
+            queryset = Playlists.objects.filter(Playlist_id=playlist_id)
+            if not queryset.exists():
+                Playlist = queryset[0]
+                Playlist.Playlist_id = playlist_id
+                Playlist.Playlist_name = playlist_name
+                Playlist.save(update_fields=['Playlist_id','Playlist_name'])
+            else:
+                Playlist = queryset[0]
+                Playlist.Playlist_id = playlist_id
+                Playlist.Playlist_name = playlist_name
+                Playlist.save()
+
+            return Response(PlaylistSerializer(Playlist).data,status=status.HTTP_200_OK)
+

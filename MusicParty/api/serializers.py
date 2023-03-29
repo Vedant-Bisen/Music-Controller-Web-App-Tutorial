@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room
+from .models import Room, Playlists
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -21,3 +21,8 @@ class UpdateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ('guest_can_pause', 'votes_to_skip', 'code')
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Playlists
+        fields = ('Playlist_id', 'Playlist_name')

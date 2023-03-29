@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
+import ViewPlaylistPage from "./ViewPlaylistPage";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 import {
   BrowserRouter as Router,
@@ -36,7 +37,7 @@ export default class HomePage extends Component {
       <Grid container spacing={3}>
         <Grid item xs={12} align="center">
           <Typography variant="h3" compact="h3">
-            House Party
+            House Part
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
@@ -86,6 +87,7 @@ export default class HomePage extends Component {
               return <Room {...props} leaveRoomCallback={this.clearRoomCode} />;
             }}
           />
+          <Route path="/viewplaylist" component={ViewPlaylistPage} />
         </Switch>
       </Router>
     );
